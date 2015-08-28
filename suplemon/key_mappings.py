@@ -81,6 +81,8 @@ key_map = {
     549: "ctrl+pagedown",
     "kNXT5": "ctrl+pageup",
     "kPRV5": "ctrl+pagedown",
+    "kHOM5": "ctrl+home",
+    "kEND5": "ctrl+end",
 
     # Alt
     563: "alt+up",
@@ -95,7 +97,19 @@ key_map = {
     547: "alt+pagedown",
     "kPRV3": "alt+pageup",
     "kNXT3": "alt+pagedown",
-
+    "kHOM3": "alt+home",
+    "kEND3": "alt+end",
     # Shift
     353: "shift+tab",
 }
+
+
+def verbose_to_code(verbose):
+    """Map a verbose key to a short keycode (e.g. ctrl+x to C^)"""
+    for k in key_map.keys():
+        compare = key_map[k]
+        # if isinstance(k, int):
+            # continue
+        if compare == verbose:
+            return str(k)
+    return ""

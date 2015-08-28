@@ -7,6 +7,7 @@ import os
 import logging
 
 from .key_mappings import key_map
+from .key_mappings import verbose_to_code
 
 # Curses can't be imported yet but we'll
 # predefine it to avoid confusing flake8
@@ -367,27 +368,45 @@ class UI:
 
     def show_legend(self):
         """Show keyboard legend."""
-        # TODO: get from key bindings
         self.legend_win.erase()
-        keys = [
-            ("^S", "Save"),
-            ("F1", "Save as"),
-            ("F2", "Reload"),
-            ("F5", "Undo"),
-            ("F6", "Redo"),
-            ("^O", "Open"),
-            ("^C", "Cut"),
-            ("^V", "Paste"),
-            ("^F", "Find"),
-            ("^D", "Find next"),
-            ("^A", "Find all"),
-            ("^W", "Duplicate line"),
-            ("ESC", "Single cursor"),
-            ("^G", "Go to"),
-            ("^E", "Run command"),
-            ("F8", "Mouse mode"),
-            ("^Q, ^X", "Exit"),
+        # Only the most important commands are displayed in the legend
+        legend_commands = [
+            ("save_file", "Save"),
+            ("save_file_as", "Save as"),
+            ("reload_file", "Reload"),
+            ("undo", "Undo"),
+            ("redo", "Redo"),
+            ("open_file", "Open"),
+            ("cut", "Cut"),
+            ("insert", "Paste"),
+            ("find", "Find"),
+            ("find_next", "Find next"),
+            ("find_all", "Find all"),
+            ("duplicate_line", "Duplicate line"),
+            ("revert_single_cursor", "Single cursor"),
+            ("go_to", "Go to"),
+            ("run_command", "Run command"),
+            ("toggle_mouse", "Mouse mode"),
+            ("exit", "Exit"),
         ]
+        keys = []
+        self.logger.debug("Bindings: {0}".format(self.app.config["app"]["keys"]))
+        keyconf = self.app.config["app"]["keys"].copy()
+        keyconf.update(self.app.config["editor"]["keys"])
+        for item in legend_commands:
+            added = False
+            for key in keyconf.keys():
+                key_item = keyconf[key]
+                if item[0] == key_item:
+                    keys.append((key, item[1]))
+                    added = True
+                    break
+            if not added:
+                for key in keyconf.keys():
+                    key_item = keyconf[key]
+                    if item[0] == key_item:
+                        keys.append((key, item[1]))
+                        break
         x = 0
         y = 0
         max_y = 1

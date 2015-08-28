@@ -41,6 +41,7 @@ class Viewer:
         self.extension_map = {
             "scss": "css",
             "less": "css",
+            "coffee": "js",
         }
         self.show_line_ends = True
 

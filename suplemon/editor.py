@@ -71,7 +71,7 @@ class Editor(Viewer):
             "enter": self.enter,                          # Enter
             "tab": self.tab,                              # Tab
             "untab": self.untab,                          # Shift + Tab
-            "escape": self.escape,                        # Escape
+            "escape": self.revert_single_cursor,          # Escape
             "arrow_right": self.arrow_right,              # Arrow Right
             "arrow_left": self.arrow_left,                # Arrow Left
             "arrow_up": self.arrow_up,                    # Arrow Up
@@ -334,11 +334,11 @@ class Editor(Viewer):
         self.move_cursors()
         self.scroll_down()
 
-    def escape(self):
+    def revert_single_cursor(self):
         """Handle escape key.
 
         Removes last_find and all cursors except primary cursor."""
-        self.last_find = ""
+        self.last_find = ""  # TODO: deprecate this
         self.cursors = [self.cursors[0]]
         self.move_cursors()
         self.render()
